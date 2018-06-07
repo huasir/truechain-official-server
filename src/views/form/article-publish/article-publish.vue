@@ -163,7 +163,7 @@ export default {
             articlePathHasEdited: false,
             editLink: false,
             editPathButtonType: 'ghost',
-            editPathButtonText: '编辑',
+            editPathButtonText: '编=======辑',
             articleStateList: [{ value: '草稿' }, { value: '等待复审' }],
             editOpenness: false,
             Openness: '公开',
