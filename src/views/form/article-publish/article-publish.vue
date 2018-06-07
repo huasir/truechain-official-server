@@ -1,6 +1,6 @@
 <style lang="less">
-    @import '../../../styles/common.less';
-    @import './article-publish.less';
+@import '../../../styles/common.less';
+@import './article-publish.less';
 </style>
 
 <template>
@@ -73,7 +73,7 @@
                         <transition name="publish-time">
                             <div v-show="editPublishTime" class="publish-time-picker-con">
                                 <div class="margin-top-10">
-                                    <DatePicker @on-change="setPublishTime" type="datetime" style="width:200px;" placeholder="选择日期和时间" ></DatePicker>                                    
+                                    <DatePicker @on-change="setPublishTime" type="datetime" style="width:200px;" placeholder="选择日期和时间" ></DatePicker>
                                 </div>
                                 <div class="margin-top-10">
                                     <Button type="primary" @click="handleSavePublishTime">确认</Button>
@@ -88,7 +88,7 @@
                         <span class="publish-button"><Button @click="handlePublish" :loading="publishLoading" icon="ios-checkmark" style="width:90px;" type="primary">发布</Button></span>
                     </Row>
                 </Card>
-                <div class="margin-top-10">
+                <!-- <div class="margin-top-10">
                     <Card>
                         <p slot="title">
                             <Icon type="navicon-round"></Icon>
@@ -111,7 +111,7 @@
                             </TabPane>
                         </Tabs>
                     </Card>
-                </div>
+                </div> -->
                 <div class="margin-top-10">
                     <Card>
                         <p slot="title">
@@ -131,7 +131,7 @@
                         <transition name="add-new-tag">
                             <div v-show="addingNewTag" class="add-new-tag-con">
                                 <Col span="14">
-                                    <Input v-model="newTagName" placeholder="请输入标签名" />                                
+                                    <Input v-model="newTagName" placeholder="请输入标签名" />
                                 </Col>
                                 <Col span="5" class="padding-left-10">
                                     <Button @click="createNewTag" long type="primary">确定</Button>
@@ -150,9 +150,10 @@
 
 <script>
 import tinymce from 'tinymce';
+
 export default {
     name: 'artical-publish',
-    data () {
+    data() {
         return {
             articleTitle: '',
             articleError: '',
@@ -163,7 +164,7 @@ export default {
             editLink: false,
             editPathButtonType: 'ghost',
             editPathButtonText: '编辑',
-            articleStateList: [{value: '草稿'}, {value: '等待复审'}],
+            articleStateList: [{ value: '草稿' }, { value: '等待复审' }],
             editOpenness: false,
             Openness: '公开',
             currentOpenness: '公开',
@@ -184,7 +185,7 @@ export default {
         };
     },
     methods: {
-        handleArticletitleBlur () {
+        handleArticletitleBlur() {
             if (this.articleTitle.length !== 0) {
                 // this.articleError = '';
                 localStorage.articleTitle = this.articleTitle; // 本地存储文章标题
@@ -193,7 +194,15 @@ export default {
                     let year = date.getFullYear();
                     let month = date.getMonth() + 1;
                     let day = date.getDate();
-                    this.fixedLink = window.location.host + '/' + year + '/' + month + '/' + day + '/';
+                    this.fixedLink =
+                        window.location.host +
+                        '/' +
+                        year +
+                        '/' +
+                        month +
+                        '/' +
+                        day +
+                        '/';
                     this.articlePath = this.articleTitle;
                     this.articlePathHasEdited = true;
                     this.showLink = true;
@@ -203,51 +212,55 @@ export default {
                 this.$Message.error('文章标题不可为空哦');
             }
         },
-        editArticlePath () {
+        editArticlePath() {
             this.editLink = !this.editLink;
-            this.editPathButtonType = this.editPathButtonType === 'ghost' ? 'success' : 'ghost';
-            this.editPathButtonText = this.editPathButtonText === '编辑' ? '完成' : '编辑';
+            this.editPathButtonType =
+                this.editPathButtonType === 'ghost' ? 'success' : 'ghost';
+            this.editPathButtonText =
+                this.editPathButtonText === '编辑' ? '完成' : '编辑';
         },
-        handleEditOpenness () {
+        handleEditOpenness() {
             this.editOpenness = !this.editOpenness;
         },
-        handleSaveOpenness () {
+        handleSaveOpenness() {
             this.Openness = this.currentOpenness;
             this.editOpenness = false;
         },
-        cancelEditOpenness () {
+        cancelEditOpenness() {
             this.currentOpenness = this.Openness;
             this.editOpenness = false;
         },
-        handleEditPublishTime () {
+        handleEditPublishTime() {
             this.editPublishTime = !this.editPublishTime;
         },
-        handleSavePublishTime () {
+        handleSavePublishTime() {
             this.publishTimeType = 'timing';
             this.editPublishTime = false;
         },
-        cancelEditPublishTime () {
+        cancelEditPublishTime() {
             this.publishTimeType = 'immediately';
             this.editPublishTime = false;
         },
-        setPublishTime (datetime) {
+        setPublishTime(datetime) {
             this.publishTime = datetime;
         },
-        setClassificationInAll (selectedArray) {
+        setClassificationInAll(selectedArray) {
             this.classificationFinalSelected = selectedArray.map(item => {
                 return item.title;
             });
-            localStorage.classificationSelected = JSON.stringify(this.classificationFinalSelected); // 本地存储所选目录列表
+            localStorage.classificationSelected = JSON.stringify(
+                this.classificationFinalSelected
+            ); // 本地存储所选目录列表
         },
-        setClassificationInOffen (selectedArray) {
+        setClassificationInOffen(selectedArray) {
             this.classificationFinalSelected = selectedArray;
         },
-        handleAddNewTag () {
+        handleAddNewTag() {
             this.addingNewTag = !this.addingNewTag;
         },
-        createNewTag () {
+        createNewTag() {
             if (this.newTagName.length !== 0) {
-                this.articleTagList.push({value: this.newTagName});
+                this.articleTagList.push({ value: this.newTagName });
                 this.addingNewTag = false;
                 setTimeout(() => {
                     this.newTagName = '';
@@ -256,11 +269,11 @@ export default {
                 this.$Message.error('请输入标签名');
             }
         },
-        cancelCreateNewTag () {
+        cancelCreateNewTag() {
             this.newTagName = '';
             this.addingNewTag = false;
         },
-        canPublish () {
+        canPublish() {
             if (this.articleTitle.length === 0) {
                 this.$Message.error('请输入文章标题');
                 return false;
@@ -268,7 +281,7 @@ export default {
                 return true;
             }
         },
-        handlePreview () {
+        handlePreview() {
             if (this.canPublish()) {
                 if (this.publishTimeType === 'immediately') {
                     let date = new Date();
@@ -278,7 +291,18 @@ export default {
                     let hour = date.getHours();
                     let minute = date.getMinutes();
                     let second = date.getSeconds();
-                    localStorage.publishTime = year + ' 年 ' + month + ' 月 ' + day + ' 日 -- ' + hour + ' : ' + minute + ' : ' + second;
+                    localStorage.publishTime =
+                        year +
+                        ' 年 ' +
+                        month +
+                        ' 月 ' +
+                        day +
+                        ' 日 -- ' +
+                        hour +
+                        ' : ' +
+                        minute +
+                        ' : ' +
+                        second;
                 } else {
                     localStorage.publishTime = this.publishTime; // 本地存储发布时间
                 }
@@ -288,12 +312,19 @@ export default {
                 });
             }
         },
-        handleSaveDraft () {
+        handleSaveDraft() {
             if (!this.canPublish()) {
                 //
             }
         },
-        handlePublish () {
+        handlePublish() {
+            // console.log(this.canPublish());
+            console.log(localStorage.articleTitle);
+            console.log(localStorage.content);
+            console.log(localStorage.tagsList);
+            console.log(localStorage.theme);
+            console.log(localStorage.publishTime);
+
             if (this.canPublish()) {
                 this.publishLoading = true;
                 setTimeout(() => {
@@ -305,25 +336,25 @@ export default {
                 }, 1000);
             }
         },
-        handleSelectTag () {
+        handleSelectTag() {
             localStorage.tagsList = JSON.stringify(this.articleTagSelected); // 本地存储文章标签列表
         }
     },
     computed: {
-        completeUrl () {
+        completeUrl() {
             let finalUrl = this.fixedLink + this.articlePath;
             localStorage.finalUrl = finalUrl; // 本地存储完整文章路径
             return finalUrl;
         }
     },
-    mounted () {
+    mounted() {
         this.articleTagList = [
-            {value: 'vue'},
-            {value: 'iview'},
-            {value: 'ES6'},
-            {value: 'webpack'},
-            {value: 'babel'},
-            {value: 'eslint'}
+            { value: 'vue' },
+            { value: 'iview' },
+            { value: 'ES6' },
+            { value: 'webpack' },
+            { value: 'babel' },
+            { value: 'eslint' }
         ];
         this.classificationList = [
             {
@@ -418,7 +449,8 @@ export default {
                 'insertdatetime media nonbreaking save table contextmenu directionality',
                 'emoticons paste textcolor colorpicker textpattern imagetools codesample'
             ],
-            toolbar1: ' newnote print fullscreen preview | undo redo | insert | styleselect | forecolor backcolor bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image emoticons media codesample',
+            toolbar1:
+                ' newnote print fullscreen preview | undo redo | insert | styleselect | forecolor backcolor bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image emoticons media codesample',
             autosave_interval: '20s',
             image_advtab: true,
             table_default_styles: {
@@ -427,7 +459,7 @@ export default {
             }
         });
     },
-    destroyed () {
+    destroyed() {
         tinymce.get('articleEditor').destroy();
     }
 };
