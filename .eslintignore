@@ -3,3 +3,5 @@ src/libs/table2excel.js
 build
 router.js
 src/views/my-components/text-editor/tinymce
+**/*.js
+**/*.vue
