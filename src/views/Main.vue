@@ -1,5 +1,9 @@
 <style lang="less">
     @import "./main.less";
+    .truechain-logo {
+        transform: scale(.7)
+    }
+        
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
@@ -12,8 +16,10 @@
                 :open-names="openedSubmenuArr"
                 :menu-list="menuList">
                 <div slot="top" class="logo-con">
-                    <img v-show="!shrink"  src="../images/logo.jpg" key="max-logo" />
-                    <img v-show="shrink" src="../images/logo-min.jpg" key="min-logo" />
+                    <img v-show="!shrink"  src="../images/logo_top.png" key="max-logo" class="truechain-logo"/>
+                    <img v-show="shrink" src="../images/logo_bot.png" key="min-logo" />
+                    <!-- <img v-show="!shrink"  src="../images/logo.jpg" key="max-logo"/>
+                    <img v-show="shrink" src="../images/logo-min.jpg" key="min-logo" /> -->
                 </div>
             </shrinkable-menu>
         </div>
