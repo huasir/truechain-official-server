@@ -1,6 +1,6 @@
 <style lang="less">
-    @import "./home.less";
-    @import "../../styles/common.less";
+@import './home.less';
+@import '../../styles/common.less';
 </style>
 <template>
     <div class="home-main">
@@ -200,23 +200,23 @@ export default {
         mapDataTable,
         toDoListItem
     },
-    data () {
+    data() {
         return {
             toDoList: [
                 {
-                    title: '去iView官网学习完整的iView组件'
+                    title: 'truechain'
                 },
                 {
-                    title: '去iView官网学习完整的iView组件'
+                    title: 'truechain'
                 },
                 {
-                    title: '去iView官网学习完整的iView组件'
+                    title: 'truechain'
                 },
                 {
-                    title: '去iView官网学习完整的iView组件'
+                    title: 'truechain'
                 },
                 {
-                    title: '去iView官网学习完整的iView组件'
+                    title: 'truechain'
                 }
             ],
             count: {
@@ -231,15 +231,15 @@ export default {
         };
     },
     computed: {
-        avatorPath () {
+        avatorPath() {
             return localStorage.avatorImgPath;
         }
     },
     methods: {
-        addNewToDoItem () {
+        addNewToDoItem() {
             this.showAddNewTodo = true;
         },
-        addNew () {
+        addNew() {
             if (this.newToDoItemValue.length !== 0) {
                 this.toDoList.unshift({
                     title: this.newToDoItemValue
@@ -252,7 +252,7 @@ export default {
                 this.$Message.error('请输入待办事项内容');
             }
         },
-        cancelAdd () {
+        cancelAdd() {
             this.showAddNewTodo = false;
             this.newToDoItemValue = '';
         }
