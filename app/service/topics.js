@@ -4,7 +4,6 @@ const { aesEncrypt } = require('../util');
 
 class TopicService extends Service {
   async create(params) {
-    console.log(Object.values(params));
     const result = await this.app.mysql.query(`
       INSERT INTO truechain_admin.article(article_title, content, create_time, tag_list, theme)
       VALUES ('${params.article_title}', '${params.content}', '${params.create_time}', '${params.tag_list}', '${params.theme}');
