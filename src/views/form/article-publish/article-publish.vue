@@ -88,7 +88,7 @@
                         <span class="publish-button"><Button @click="handlePublish" :loading="publishLoading" icon="ios-checkmark" style="width:90px;" type="primary">发布</Button></span>
                     </Row>
                 </Card>
-                <!-- <div class="margin-top-10">
+                <div class="margin-top-10">
                     <Card>
                         <p slot="title">
                             <Icon type="navicon-round"></Icon>
@@ -111,7 +111,7 @@
                             </TabPane>
                         </Tabs>
                     </Card>
-                </div> -->
+                </div>
                 <div class="margin-top-10">
                     <Card>
                         <p slot="title">
@@ -150,10 +150,11 @@
 
 <script>
 import tinymce from 'tinymce';
+import Util from '@/libs/util';
 
 export default {
     name: 'artical-publish',
-    data() {
+    data () {
         return {
             articleTitle: '',
             articleError: '',
@@ -185,7 +186,7 @@ export default {
         };
     },
     methods: {
-        handleArticletitleBlur() {
+        handleArticletitleBlur () {
             if (this.articleTitle.length !== 0) {
                 // this.articleError = '';
                 localStorage.articleTitle = this.articleTitle; // 本地存储文章标题
@@ -212,39 +213,39 @@ export default {
                 this.$Message.error('文章标题不可为空哦');
             }
         },
-        editArticlePath() {
+        editArticlePath () {
             this.editLink = !this.editLink;
             this.editPathButtonType =
                 this.editPathButtonType === 'ghost' ? 'success' : 'ghost';
             this.editPathButtonText =
                 this.editPathButtonText === '编辑' ? '完成' : '编辑';
         },
-        handleEditOpenness() {
+        handleEditOpenness () {
             this.editOpenness = !this.editOpenness;
         },
-        handleSaveOpenness() {
+        handleSaveOpenness () {
             this.Openness = this.currentOpenness;
             this.editOpenness = false;
         },
-        cancelEditOpenness() {
+        cancelEditOpenness () {
             this.currentOpenness = this.Openness;
             this.editOpenness = false;
         },
-        handleEditPublishTime() {
+        handleEditPublishTime () {
             this.editPublishTime = !this.editPublishTime;
         },
-        handleSavePublishTime() {
+        handleSavePublishTime () {
             this.publishTimeType = 'timing';
             this.editPublishTime = false;
         },
-        cancelEditPublishTime() {
+        cancelEditPublishTime () {
             this.publishTimeType = 'immediately';
             this.editPublishTime = false;
         },
-        setPublishTime(datetime) {
+        setPublishTime (datetime) {
             this.publishTime = datetime;
         },
-        setClassificationInAll(selectedArray) {
+        setClassificationInAll (selectedArray) {
             this.classificationFinalSelected = selectedArray.map(item => {
                 return item.title;
             });
@@ -252,13 +253,13 @@ export default {
                 this.classificationFinalSelected
             ); // 本地存储所选目录列表
         },
-        setClassificationInOffen(selectedArray) {
+        setClassificationInOffen (selectedArray) {
             this.classificationFinalSelected = selectedArray;
         },
-        handleAddNewTag() {
+        handleAddNewTag () {
             this.addingNewTag = !this.addingNewTag;
         },
-        createNewTag() {
+        createNewTag () {
             if (this.newTagName.length !== 0) {
                 this.articleTagList.push({ value: this.newTagName });
                 this.addingNewTag = false;
@@ -269,11 +270,11 @@ export default {
                 this.$Message.error('请输入标签名');
             }
         },
-        cancelCreateNewTag() {
+        cancelCreateNewTag () {
             this.newTagName = '';
             this.addingNewTag = false;
         },
-        canPublish() {
+        canPublish () {
             if (this.articleTitle.length === 0) {
                 this.$Message.error('请输入文章标题');
                 return false;
@@ -281,7 +282,7 @@ export default {
                 return true;
             }
         },
-        handlePreview() {
+        handlePreview () {
             if (this.canPublish()) {
                 if (this.publishTimeType === 'immediately') {
                     let date = new Date();
@@ -312,42 +313,63 @@ export default {
                 });
             }
         },
-        handleSaveDraft() {
+        handleSaveDraft () {
             if (!this.canPublish()) {
                 //
             }
         },
-        handlePublish() {
+        handlePublish () {
             // console.log(this.canPublish());
-            console.log(localStorage.articleTitle);
-            console.log(localStorage.content);
-            console.log(localStorage.tagsList);
-            console.log(localStorage.theme);
-            console.log(localStorage.publishTime);
+            // console.log(localStorage.articleTitle);
+            // console.log(localStorage.content);
+            // console.log(localStorage.tagsList);
+            // console.log(localStorage.theme);
+            // console.log(localStorage.publishTime);
+            // console.log(this.articleTitle , 'articleTitle');
 
             if (this.canPublish()) {
                 this.publishLoading = true;
-                setTimeout(() => {
+                /* eslint-disable no-debugger */
+                debugger;
+                console.log(JSON.stringify(this.$data, null, 2));
+
+                Util.ajax.post('/api/v2/topics', {
+                    article_title: this.articleTitle,
+                    content: this.articlePath,
+                    create_time: this.tagsList,
+                    tag_list: this.articleTagSelected, // 标签
+                    theme: this.classificationFinalSelected // 分类
+                }).then(x => {
+                    return x;
+                }).then(res => {
+                    console.log(res, '====');
                     this.publishLoading = false;
                     this.$Notice.success({
                         title: '保存成功',
                         desc: '文章《' + this.articleTitle + '》保存成功'
                     });
-                }, 1000);
+                });
+                // setTimeout(() => {
+                //     this.publishLoading = false;
+                //     this.$Notice.success({
+                //         title: '保存成功',
+                //         desc: '文章《' + this.articleTitle + '》保存成功'
+                //     });
+                // }, 1000);
             }
         },
-        handleSelectTag() {
+        handleSelectTag () {
             localStorage.tagsList = JSON.stringify(this.articleTagSelected); // 本地存储文章标签列表
         }
     },
     computed: {
-        completeUrl() {
+        completeUrl () {
             let finalUrl = this.fixedLink + this.articlePath;
             localStorage.finalUrl = finalUrl; // 本地存储完整文章路径
             return finalUrl;
         }
     },
-    mounted() {
+    mounted () {
         this.articleTagList = [
             { value: 'vue' },
             { value: 'iview' },
@@ -459,7 +481,7 @@ export default {
             }
         });
     },
-    destroyed() {
+    destroyed () {
         tinymce.get('articleEditor').destroy();
     }
 };
