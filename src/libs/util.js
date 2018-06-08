@@ -12,11 +12,13 @@ util.title = function (title) {
 };
 
 const ajaxUrl = env === 'development'
-    ? 'http://127.0.0.1:8888'
+    ? 'http://localhost:7002/'
+    // ? 'http://45.40.243.125:7001/'
     : env === 'production'
         ? 'https://www.url.com'
         : 'https://debug.url.com';
-
+/* eslint-disable no-debugger */
+// debugger;
 util.ajax = axios.create({
     baseURL: ajaxUrl,
     timeout: 30000
