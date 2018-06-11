@@ -9,5 +9,6 @@ module.exports = app => {
     controller
   } = app;
   router.get('/', controller.home.index);
+  router.post('/test', controller.home.test);
   router.resources('topics', '/api/v2/topics', controller.topics);
 };
