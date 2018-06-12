@@ -12,7 +12,7 @@ util.title = function (title) {
 };
 
 const ajaxUrl = env === 'development'
-    ? 'http://localhost:7002/'
+    ? 'http://localhost:7001/'
     // ? 'http://45.40.243.125:7001/'
     : env === 'production'
         ? 'https://www.url.com'

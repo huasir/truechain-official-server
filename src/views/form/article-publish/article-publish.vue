@@ -150,6 +150,7 @@
 
 <script>
 import tinymce from 'tinymce';
+// import $ from 'jquery';
 import Util from '@/libs/util';
 
 export default {
@@ -319,43 +320,22 @@ export default {
             }
         },
         handlePublish () {
-            // console.log(this.canPublish());
-            // console.log(localStorage.articleTitle);
-            // console.log(localStorage.content);
-            // console.log(localStorage.tagsList);
-            // console.log(localStorage.theme);
-            // console.log(localStorage.publishTime);
-            // console.log(this.articleTitle , 'articleTitle');
-
             if (this.canPublish()) {
                 this.publishLoading = true;
                 /* eslint-disable no-debugger */
-                debugger;
-                console.log(JSON.stringify(this.$data, null, 2));
-
                 Util.ajax.post('/api/v2/topics', {
                     article_title: this.articleTitle,
-                    content: this.articlePath,
-                    create_time: this.tagsList,
-                    tag_list: this.articleTagSelected, // 标签
-                    theme: this.classificationFinalSelected // 分类
+                    content: tinymce.activeEditor.getContent(),
+                    create_time: `${+new Date()}`,
+                    tag_list: JSON.stringify(this.articleTagSelected), // 标签
+                    theme: JSON.stringify(this.classificationFinalSelected) // 分类
                 }).then(x => {
-                    return x;
-                }).then(res => {
-                    console.log(res, '====');
                     this.publishLoading = false;
                     this.$Notice.success({
                         title: '保存成功',
                         desc: '文章《' + this.articleTitle + '》保存成功'
                     });
                 });
-                // setTimeout(() => {
-                //     this.publishLoading = false;
-                //     this.$Notice.success({
-                //         title: '保存成功',
-                //         desc: '文章《' + this.articleTitle + '》保存成功'
-                //     });
-                // }, 1000);
             }
         },
         handleSelectTag () {
@@ -462,6 +442,34 @@ export default {
             branding: false,
             elementpath: false,
             height: 600,
+            images_upload_url: function (params) {
+                // debugger;
+            },
+            images_upload_handler: (blobInfo, success, failure) => {
+                var xhr, formData;
+                var sizeLimit = 1024 * 1024 * 2;
+                // var sizeLimit = 1024;
+                if (blobInfo.blob().size > sizeLimit) {
+                    alert('长传图片不能大于2M');
+                } else {
+                    formData = new FormData();
+                    formData.append('file', blobInfo.blob(), blobInfo.filename());
+                }
+                xhr = new XMLHttpRequest();
+                xhr.withCredentials = false;
+                xhr.open('POST', 'http://127.0.0.1:7001/uploaad');
+
+                xhr.onload = function () {
+                    if (xhr.status !== 200) {
+                        failure('HTTP Error: ' + xhr.status);
+                        return;
+                    }
+                    const { data } = JSON.parse(xhr.responseText);
+                    tinymce.get('articleEditor').execCommand('mceInsertContent', false, `<img src="${data.imgSrc}" style="width: 400px"/>`);
+                    success(data.location);
+                };
+                xhr.send(formData);
+            },
             language: 'zh_CN.GB2312',
             menubar: 'edit insert view format table tools',
             theme: 'modern',
