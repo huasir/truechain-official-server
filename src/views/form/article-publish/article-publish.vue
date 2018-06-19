@@ -95,18 +95,18 @@
                             分类目录
                         </p>
                         <Tabs type="card">
-                            <TabPane label="所有分类目录">
+                            <!-- <TabPane label="所有分类目录">
                                 <div class="classification-con">
                                     <Tree :data="classificationList" @on-check-change="setClassificationInAll" show-checkbox></Tree>
                                 </div>
-                            </TabPane>
+                            </TabPane> -->
                             <TabPane label="常用目录">
                                 <div class="classification-con">
-                                    <CheckboxGroup v-model="offenUsedClassSelected" @on-change="setClassificationInOffen">
+                                    <RadioGroup v-model="offenUsedClassSelected" @on-change="setClassificationInOffen">
                                         <p v-for="item in offenUsedClass" :key="item.title">
-                                            <Checkbox :label="item.title">{{ item.title }}</Checkbox>
+                                            <Radio :label="item.value">{{ item.title }}</Radio>
                                         </p>
-                                    </CheckboxGroup>
+                                    </RadioGroup>
                                 </div>
                             </TabPane>
                         </Tabs>
@@ -179,8 +179,10 @@ export default {
             classificationList: [],
             classificationSelected: [], // 在所有分类目录中选中的目录数组
             offenUsedClass: [],
-            offenUsedClassSelected: [], // 常用目录选中的目录
-            classificationFinalSelected: [], // 最后实际选择的目录
+            offenUsedClassSelected: '1', // 常用目录选中的目录
+            // offenUsedClassSelected: [], // 常用目录选中的目录
+            classificationFinalSelected: '', // 最后实际选择的目录
+            // classificationFinalSelected: [], // 最后实际选择的目录
             publishLoading: false,
             addingNewTag: false, // 添加新标签
             newTagName: '' // 新建标签名
@@ -324,11 +326,11 @@ export default {
                 this.publishLoading = true;
                 /* eslint-disable no-debugger */
                 Util.ajax.post('/api/v2/topics', {
-                    article_title: this.articleTitle,
+                    title: this.articleTitle,
                     content: tinymce.activeEditor.getContent(),
                     create_time: `${+new Date()}`,
                     tag_list: JSON.stringify(this.articleTagSelected), // 标签
-                    theme: JSON.stringify(this.classificationFinalSelected) // 分类
+                    theme: this.classificationFinalSelected // 分类
                 }).then(x => {
                     this.publishLoading = false;
                     this.$Notice.success({
@@ -351,12 +353,12 @@ export default {
     },
     mounted () {
         this.articleTagList = [
-            { value: 'vue' },
-            { value: 'iview' },
-            { value: 'ES6' },
-            { value: 'webpack' },
-            { value: 'babel' },
-            { value: 'eslint' }
+            { value: '区块链' },
+            { value: '初链' },
+            { value: 'truechain' },
+            { value: '央视' },
+            { value: '去中心化' },
+            { value: '混合共识' }
         ];
         this.classificationList = [
             {
@@ -422,19 +424,12 @@ export default {
         ];
         this.offenUsedClass = [
             {
-                title: 'vue实例'
+                title: '技术动态',
+                value: '1'
             },
             {
-                title: '生命周期'
-            },
-            {
-                title: '模板语法'
-            },
-            {
-                title: '插值'
-            },
-            {
-                title: '缩写'
+                title: '商业动态',
+                value: '2'
             }
         ];
         tinymce.init({
@@ -442,6 +437,14 @@ export default {
             branding: false,
             elementpath: false,
             height: 600,
+            toolbar: 'fontsizeselect',
+            fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+            setup: function (ed) {
+                ed.on('init', function () {
+                    this.execCommand('fontName', false, 'tahoma');
+                    this.execCommand('fontSize', false, '14px');
+                });
+            },
             images_upload_url: function (params) {
                 // debugger;
             },
