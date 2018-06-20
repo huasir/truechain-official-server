@@ -62,8 +62,20 @@ module.exports = {
                 }),
             },
             {
-                test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
+                test: /\.(gif|jpg|png)\??.*$/,
                 loader: 'url-loader?limit=1024'
+            },
+            {
+                test: /\.(woff|svg|eot|ttf)\??.*$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            outputPath: 'fonts/',
+                            // limit: 1024,
+                        }
+                    }
+                ]
             },
             {
                 test: /\.(html|tpl)$/,
