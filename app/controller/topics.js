@@ -3,10 +3,9 @@ const Controller = require('egg').Controller;
 
 // 定义创建接口的请求参数规则
 const createRule = {
-  article_title: 'string',
+  title: 'string',
   content: 'string',
   create_time: 'string',
-  tag_list: 'string',
   theme: 'string'
 };
 
