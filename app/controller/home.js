@@ -81,7 +81,6 @@ class HomeController extends Controller {
     } catch (err) {
       throw err;
     }
-
   }
 }
 
