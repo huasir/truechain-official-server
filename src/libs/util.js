@@ -11,12 +11,20 @@ util.title = function (title) {
     window.document.title = title;
 };
 
-const ajaxUrl = env === 'development'
-    ? 'http://localhost:7001/'
-    // ? 'http://45.40.243.125:7001/'
-    : env === 'production'
-        ? 'https://www.url.com'
-        : 'https://debug.url.com';
+let ajaxUrl = '';
+
+switch (env) {
+    case 'development':
+        ajaxUrl = 'http://localhost:7001/';
+        break;
+    case 'production':
+        ajaxUrl = 'http://39.105.125.189:8001/';
+        break;
+    default:
+        ajaxUrl = 'https://debug.url.com';
+        break;
+}
+
 /* eslint-disable no-debugger */
 // debugger;
 util.ajax = axios.create({
@@ -261,8 +269,8 @@ util.checkUpdate = function (vm) {
         });
         if (semver.lt(packjson.version, version)) {
             vm.$Notice.info({
-                title: 'iview-admin更新啦',
-                desc: '<p>iView-admin更新到了' + version + '了，去看看有哪些变化吧</p><a style="font-size:13px;" href="https://github.com/iview/iview-admin/releases" target="_blank">前往github查看</a>'
+                title: '更新啦',
+                desc: '<p>更新到了' + version + '了'
             });
         }
     });
