@@ -4,10 +4,23 @@ const { aesEncrypt } = require('../util');
 
 class TopicService extends Service {
   async create(params) {
+    // debugger
     const result = await this.app.mysql.query(`
-      INSERT INTO truechain_admin.article(article_title, content, create_time, tag_list, theme)
-      VALUES ('${params.article_title}', '${params.content}', '${params.create_time}', '${params.tag_list}', '${params.theme}');
+      INSERT INTO truechain_admin.article(title, create_time, tag_list, theme)
+      VALUES ('${params.title}', '${params.create_time}', '${params.tag_list}', '${params.theme}');
     `);
+    if(result.affectedRows === 1) {
+      await this.app.mysql.query(`
+        INSERT INTO content(sid, content) VALUE(${result.insertId},'${params.content}')
+      `)
+    } else {
+      this.ctx.status(500);
+      ctx.body = {
+        code: 500,
+        message: '数据库插入错误',
+        data: null
+      }
+    }
     // 检查调用是否成功，如果调用失败会抛出异常
     // 返回创建的 topic 的 id
     // debugger;
