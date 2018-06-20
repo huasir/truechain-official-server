@@ -86,6 +86,13 @@
                         <span class="publish-button"><Button @click="handlePreview">预览</Button></span>
                         <span class="publish-button"><Button @click="handleSaveDraft">保存草稿</Button></span>
                         <span class="publish-button"><Button @click="handlePublish" :loading="publishLoading" icon="ios-checkmark" style="width:90px;" type="primary">发布</Button></span>
+                        <Modal
+                            v-model="modal1"
+                            title="发布文章"
+                            @on-ok="ok"
+                            @on-cancel="cancel">
+                            <p>确定发布该文章 ? </p>
+                        </Modal>
                     </Row>
                 </Card>
                 <div class="margin-top-10">
@@ -157,6 +164,7 @@ export default {
     name: 'artical-publish',
     data () {
         return {
+            modal1: false,
             articleTitle: '',
             articleError: '',
             showLink: false,
@@ -189,6 +197,29 @@ export default {
         };
     },
     methods: {
+        ok () {
+            if (this.canPublish()) {
+                this.publishLoading = true;
+                /* eslint-disable no-debugger */
+                Util.ajax.post('/api/v2/topics', {
+                    title: this.articleTitle,
+                    content: tinymce.activeEditor.getContent(),
+                    create_time: `${+new Date()}`,
+                    tag_list: JSON.stringify(this.articleTagSelected), // 标签
+                    theme: this.classificationFinalSelected // 分类
+                }).then(x => {
+                    this.publishLoading = false;
+                    this.$Message.info('Clicked ok');
+                    this.$Notice.success({
+                        title: '保存成功',
+                        desc: '文章《' + this.articleTitle + '》保存成功'
+                    });
+                });
+            }
+        },
+        cancel () {
+            this.$Message.info('Clicked cancel');
+        },
         handleArticletitleBlur () {
             if (this.articleTitle.length !== 0) {
                 // this.articleError = '';
@@ -322,23 +353,7 @@ export default {
             }
         },
         handlePublish () {
-            if (this.canPublish()) {
-                this.publishLoading = true;
-                /* eslint-disable no-debugger */
-                Util.ajax.post('/api/v2/topics', {
-                    title: this.articleTitle,
-                    content: tinymce.activeEditor.getContent(),
-                    create_time: `${+new Date()}`,
-                    tag_list: JSON.stringify(this.articleTagSelected), // 标签
-                    theme: this.classificationFinalSelected // 分类
-                }).then(x => {
-                    this.publishLoading = false;
-                    this.$Notice.success({
-                        title: '保存成功',
-                        desc: '文章《' + this.articleTitle + '》保存成功'
-                    });
-                });
-            }
+            this.modal1 = true;
         },
         handleSelectTag () {
             localStorage.tagsList = JSON.stringify(this.articleTagSelected); // 本地存储文章标签列表
@@ -460,7 +475,8 @@ export default {
                 }
                 xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
-                xhr.open('POST', 'http://127.0.0.1:7001/uploaad');
+                xhr.open('POST', 'http://192.168.13.21:7001/uploaad');
+                // xhr.open('POST', 'http://127.0.0.1:7001/uploaad');
 
                 xhr.onload = function () {
                     if (xhr.status !== 200) {
