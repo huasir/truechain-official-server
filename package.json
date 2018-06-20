@@ -28,9 +28,9 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-manage-api --port=7001",
+    "start": "egg-scripts start --daemon --title=egg-server-manage-api --port=8001",
     "stop": "egg-scripts stop --title=egg-server-manage-api",
-    "dev": "egg-bin dev --port=7001",
+    "dev": "egg-bin dev --port=8001",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",
