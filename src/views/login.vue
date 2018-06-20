@@ -40,7 +40,7 @@
 <script>
 import Cookies from 'js-cookie';
 export default {
-    data() {
+    data () {
         return {
             form: {
                 userName: 'iview_admin',
@@ -57,7 +57,7 @@ export default {
         };
     },
     methods: {
-        handleSubmit() {
+        handleSubmit () {
             this.$refs.loginForm.validate(valid => {
                 if (valid) {
                     Cookies.set('user', this.form.userName);
@@ -66,14 +66,15 @@ export default {
                         'setAvator',
                         'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg'
                     );
-                    if (this.form.userName === 'iview_admin') {
+                    if (this.form.userName === 'admin' && this.form.password === '123456') {
                         Cookies.set('access', 0);
+                        this.$router.push({
+                            name: 'home_index'
+                        });
                     } else {
                         Cookies.set('access', 1);
+                        this.$Message.error('账号或密码错误');
                     }
-                    this.$router.push({
-                        name: 'home_index'
-                    });
                 }
             });
         }
