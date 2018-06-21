@@ -64,7 +64,7 @@ export default {
                     Cookies.set('password', this.form.password);
                     this.$store.commit(
                         'setAvator',
-                        'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg'
+                        'http://5b0988e595225.cdn.sohucs.com/images/20180105/10f25c75f9bb49b79fedfb8fe0ea505a.jpeg'
                     );
                     if (this.form.userName === 'admin' && this.form.password === '123456') {
                         Cookies.set('access', 0);
