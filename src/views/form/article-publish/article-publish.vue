@@ -159,6 +159,8 @@
 import tinymce from 'tinymce';
 // import $ from 'jquery';
 import Util from '@/libs/util';
+import { setStore, getStore, removeStore } from '@/libs/myUtil';
+import { baseUrl } from '@/config/index.js';
 
 export default {
     name: 'artical-publish',
@@ -197,6 +199,12 @@ export default {
         };
     },
     methods: {
+        /* getBody (content) {
+            const REG_BODY = /<body[^>]*>([\s\S]*)<\/body>/;
+            const result = REG_BODY.exec(content);
+            if (result && result.length === 2) { return result[1]; }
+            return content;
+        }, */
         ok () {
             if (this.canPublish()) {
                 this.publishLoading = true;
@@ -210,11 +218,15 @@ export default {
                     theme: this.classificationFinalSelected || '1' // 分类
                 }).then(x => {
                     this.publishLoading = false;
-                    this.$Message.info('Clicked ok');
                     this.$Notice.success({
                         title: '保存成功',
                         desc: '文章《' + this.articleTitle + '》保存成功'
                     });
+                    removeStore('draft');
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 });
             }
         },
@@ -319,6 +331,7 @@ export default {
         },
         handlePreview () {
             if (this.canPublish()) {
+                this.handleSaveDraft(null, 1);
                 if (this.publishTimeType === 'immediately') {
                     let date = new Date();
                     let year = date.getFullYear();
@@ -342,19 +355,29 @@ export default {
                 } else {
                     localStorage.publishTime = this.publishTime; // 本地存储发布时间
                 }
-                localStorage.content = tinymce.activeEditor.getContent();
+
                 this.$router.push({
                     name: 'preview'
                 });
             }
         },
-        handleSaveDraft () {
-            if (!this.canPublish()) {
-                //
+        handleSaveDraft (x, b) {
+            // debugger;
+            try {
+                setStore('draft', '1');
+                setStore('themeType', this.classificationFinalSelected || '1');
+                setStore('content', tinymce.activeEditor.getContent());
+                if (!b) {
+                    this.$Message.success('草稿保存成功');
+                }
+            } catch (error) {
+                this.$Message.error(error);
             }
         },
         handlePublish () {
-            this.modal1 = true;
+            if (this.canPublish()) {
+                this.modal1 = true;
+            }
         },
         handleSelectTag () {
             localStorage.tagsList = JSON.stringify(this.articleTagSelected); // 本地存储文章标签列表
@@ -454,6 +477,7 @@ export default {
             elementpath: false,
             height: 600,
             toolbar: 'fontsizeselect',
+            remove_linebreaks: false,
             fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
             setup: function (ed) {
                 ed.on('init', function () {
@@ -465,20 +489,18 @@ export default {
                 // debugger;
             },
             images_upload_handler: (blobInfo, success, failure) => {
-                var xhr, formData;
-                var sizeLimit = 1024 * 1024 * 2;
+                let xhr, formData;
+                const sizeLimit = 1024 * 1024 * 2;
                 // var sizeLimit = 1024;
                 if (blobInfo.blob().size > sizeLimit) {
-                    alert('长传图片不能大于2M');
+                    failure('长传图片不能大于2M');
                 } else {
                     formData = new FormData();
                     formData.append('file', blobInfo.blob(), blobInfo.filename());
                 }
                 xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
-                // xhr.open('POST', 'http://192.168.13.21:7001/uploaad');
-                xhr.open('POST', 'http://127.0.0.1:7001/uploaad');
-
+                xhr.open('POST', `${baseUrl}uploaad`);
                 xhr.onload = function () {
                     if (xhr.status !== 200) {
                         failure('HTTP Error: ' + xhr.status);
@@ -508,6 +530,23 @@ export default {
                 borderCollapse: 'collapse'
             }
         });
+        if (getStore('draft') === '1') {
+            const {
+                articleTitle,
+                content,
+                tagsList,
+                themeType
+            } = window.localStorage;
+            this.articleTitle = articleTitle;
+            this.offenUsedClassSelected = themeType;
+            if (tagsList) {
+                this.articleTagSelected = JSON.parse(tagsList);
+            }
+            // const bodyValue = this.getBody(content);
+            setTimeout(() => {
+                tinymce.get('articleEditor').execCommand('mceInsertContent', false, content);
+            }, 1000);
+        }
     },
     destroyed () {
         tinymce.get('articleEditor').destroy();
