@@ -8,4 +8,3 @@ node_modules
 build/env.js
 dist/
 .idea/
-src/config
