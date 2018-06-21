@@ -1,7 +1,7 @@
 import axios from 'axios';
-import env from '../../build/env';
 import semver from 'semver';
 import packjson from '../../package.json';
+import { baseUrl } from '../config/index.js';
 
 let util = {
 
@@ -11,24 +11,10 @@ util.title = function (title) {
     window.document.title = title;
 };
 
-let ajaxUrl = '';
-
-switch (env) {
-    case 'development':
-        ajaxUrl = 'http://localhost:7001/';
-        break;
-    case 'production':
-        ajaxUrl = 'http://39.105.125.189:8001/';
-        break;
-    default:
-        ajaxUrl = 'https://debug.url.com';
-        break;
-}
-
 /* eslint-disable no-debugger */
 // debugger;
 util.ajax = axios.create({
-    baseURL: ajaxUrl,
+    baseURL: baseUrl,
     timeout: 30000
 });
 
