@@ -31,6 +31,7 @@ class HomeController extends Controller {
 
   }
   async uploaad() {
+    debugger;
     const { ctx, app, config:{ qiniuUpload: { accessKey, secretKey } } } = this
     let stream         = await ctx.getFileStream();
     const config       = new qiniu.conf.Config();
@@ -43,10 +44,12 @@ class HomeController extends Controller {
     const uploadToken  = putPolicy.uploadToken(mac);
     const formUploader = new qiniu.form_up.FormUploader(config);
     const putExtra     = new qiniu.form_up.PutExtra();
-    // const key          = md5.update(`${ +new Date() }`).digest('hex');
-    const key          =  `photo${+new Date()}`;
+    const current_date = (new Date()).valueOf().toString();
+    const key = crypto.createHash('sha1').update(current_date + stream.filename).digest('hex');
+
     const postfix      = stream.filename.match(/\.\w+$/)[0];
     const imgSrc       = `http://oo0yvx4fd.bkt.clouddn.com/${ key + postfix }`;
+    // debugger
 
     if(!(['.jpg','.png'].includes(postfix))) {
       ctx.status = 402;
