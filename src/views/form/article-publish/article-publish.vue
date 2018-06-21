@@ -201,12 +201,13 @@ export default {
             if (this.canPublish()) {
                 this.publishLoading = true;
                 /* eslint-disable no-debugger */
+                // debugger;
                 Util.ajax.post('/api/v2/topics', {
                     title: this.articleTitle,
                     content: tinymce.activeEditor.getContent(),
                     create_time: `${+new Date()}`,
                     tag_list: JSON.stringify(this.articleTagSelected), // 标签
-                    theme: this.classificationFinalSelected // 分类
+                    theme: this.classificationFinalSelected || '1' // 分类
                 }).then(x => {
                     this.publishLoading = false;
                     this.$Message.info('Clicked ok');
@@ -475,8 +476,8 @@ export default {
                 }
                 xhr = new XMLHttpRequest();
                 xhr.withCredentials = false;
-                xhr.open('POST', 'http://192.168.13.21:7001/uploaad');
-                // xhr.open('POST', 'http://127.0.0.1:7001/uploaad');
+                // xhr.open('POST', 'http://192.168.13.21:7001/uploaad');
+                xhr.open('POST', 'http://127.0.0.1:7001/uploaad');
 
                 xhr.onload = function () {
                     if (xhr.status !== 200) {
