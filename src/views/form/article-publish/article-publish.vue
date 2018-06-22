@@ -89,8 +89,8 @@
                         <Modal
                             v-model="modal1"
                             title="发布文章"
-                            @on-ok="ok"
-                            @on-cancel="cancel">
+                            @on-ok="publishOk"
+                            @on-cancel="publishCancel">
                             <p>确定发布该文章 ? </p>
                         </Modal>
                     </Row>
@@ -205,7 +205,7 @@ export default {
             if (result && result.length === 2) { return result[1]; }
             return content;
         }, */
-        ok () {
+        publishOk () {
             if (this.canPublish()) {
                 this.publishLoading = true;
                 /* eslint-disable no-debugger */
@@ -230,7 +230,7 @@ export default {
                 });
             }
         },
-        cancel () {
+        publishCancel () {
             this.$Message.info('Clicked cancel');
         },
         handleArticletitleBlur () {
@@ -528,7 +528,25 @@ export default {
             table_default_styles: {
                 width: '100%',
                 borderCollapse: 'collapse'
-            }
+            },
+            style_formats: [
+                {
+                    title: '首行缩进',
+                    block: 'p',
+                    styles: { 'text-indent': '2em' }
+                },
+                {
+                    title: '行高',
+                    items: [
+                        {title: '1', styles: { 'line-height': '1' }, inline: 'span'},
+                        {title: '1.5', styles: { 'line-height': '1.5' }, inline: 'span'},
+                        {title: '2', styles: { 'line-height': '2' }, inline: 'span'},
+                        {title: '2.5', styles: { 'line-height': '2.5' }, inline: 'span'},
+                        {title: '3', styles: { 'line-height': '3' }, inline: 'span'}
+                    ]
+                }
+            ]
+
         });
         if (getStore('draft') === '1') {
             const {
