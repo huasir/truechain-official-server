@@ -17,7 +17,7 @@ class HomeController extends Controller {
         if (respErr) {
           reject(respErr);
         } else {
-          resolve(respBody, respInfo)
+          resolve(respBody, respInfo);
         }
       });
     });
