@@ -36,9 +36,9 @@ class HomeController extends Controller {
     let stream         = await ctx.getFileStream();
     const config       = new qiniu.conf.Config();
     const options      = {
-      scope: 'photo',
+      scope: 'truechain-photo',
     };
-    config.zone        = qiniu.zone.Zone_z2;
+    config.zone        = qiniu.zone.Zone_z1;
     const putPolicy    = new qiniu.rs.PutPolicy(options);
     const mac          = new qiniu.auth.digest.Mac(accessKey, secretKey);
     const uploadToken  = putPolicy.uploadToken(mac);
@@ -48,7 +48,7 @@ class HomeController extends Controller {
     const key = crypto.createHash('sha1').update(current_date + stream.filename).digest('hex');
 
     const postfix      = stream.filename.match(/\.\w+$/)[0];
-    const imgSrc       = `http://oo0yvx4fd.bkt.clouddn.com/${ key + postfix }`;
+    const imgSrc       = `https://qiniu.baixiaojian.com/${ key + postfix }`;
     // debugger
 
     if(!(['.jpg','.png'].includes(postfix))) {
