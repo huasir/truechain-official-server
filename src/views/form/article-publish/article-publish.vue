@@ -507,7 +507,7 @@ export default {
                         return;
                     }
                     const { data } = JSON.parse(xhr.responseText);
-                    tinymce.get('articleEditor').execCommand('mceInsertContent', false, `<img src="${data.imgSrc}" style="width: 400px"/>`);
+                    tinymce.get('articleEditor').execCommand('mceInsertContent', false, `<img src="${data.imgSrc}" style="width: auto; height: auto;"/>`);
                     success(data.location);
                 };
                 xhr.send(formData);
