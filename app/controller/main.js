@@ -44,6 +44,27 @@ class HomeController extends Controller {
       data: result
     }
   }
+  async getIpInfo() {
+    const { ctx, app } = this;
+    const { ip  } = ctx.query;
+    if(!ip) {
+      ctx.body = {
+        code: 422,
+        message: '参数不全',
+        data: null
+      }
+      return;
+    }
+    // debugger
+    const result = await app.curl(`http://ip.taobao.com/service/getIpInfo.php?ip=${ip}`);
+    console.log(result);
+
+    ctx.body = {
+      code: 0,
+      message: 'ip信息',
+      data: result.data.toString()
+    }
+  }
 }
 
 module.exports = HomeController;

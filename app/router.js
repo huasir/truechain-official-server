@@ -11,6 +11,6 @@ module.exports = app => {
   router.get('/', controller.home.index);
   router.post('/uploaad', controller.home.uploaad);
   router.get('/api2/articleList', controller.main.index);
-  router.get('/api2/articleDetail', controller.main.detail);
+  router.get('/api2/getIpInfo', controller.main.getIpInfo);
   router.resources('topics', '/api/v2/topics', controller.topics);
 };

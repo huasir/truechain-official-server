@@ -31,7 +31,7 @@ class HomeController extends Controller {
 
   }
   async uploaad() {
-    debugger;
+    // debugger;
     const { ctx, app, config:{ qiniuUpload: { accessKey, secretKey } } } = this
     let stream         = await ctx.getFileStream();
     const config       = new qiniu.conf.Config();
