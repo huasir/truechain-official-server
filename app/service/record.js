@@ -6,7 +6,7 @@ class TopicService extends Service {
   async create(params) {
     const result = await this.app.mysql.get('db2').query(`
       INSERT INTO record(address, value, cause, wechat, mobile, supply, hash, create_time)
-      VALUES ('${params.address}', '${params.value}', '${params.cause || ''}', '${params.wechat || ''}', '${params.mobile || ''}', '${params.supply || ''}', '${ hash || ''}','${+new Date()}')
+      VALUES ('${params.address}', '${params.value}', '${params.cause || ''}', '${params.wechat || ''}', '${params.mobile || ''}', '${params.supply || ''}', '${ params.hash || ''}','${+new Date()}')
     `);
     if(result.affectedRows === 1) {
       return {
