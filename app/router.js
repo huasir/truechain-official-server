@@ -14,4 +14,5 @@ module.exports = app => {
   router.get('/api2/articleDetail', controller.main.detail);
   router.get('/api2/getIpInfo', controller.main.getIpInfo);
   router.resources('topics', '/api/v2/topics', controller.topics);
+  router.resources('record', '/api/v2/record', controller.record);
 };
