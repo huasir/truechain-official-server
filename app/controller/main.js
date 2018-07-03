@@ -5,7 +5,7 @@ class HomeController extends Controller {
     const { ctx, app } = this;
     const { theme = 1, pageNumber = 10, pageIndex = 0 } = ctx.query;
     // debugger
-    const result = await app.mysql.query(`
+    const result = await app.mysql.get('db1').query(`
       SELECT * FROM article
       WHERE theme='${theme}'
       ORDER BY
@@ -32,7 +32,7 @@ class HomeController extends Controller {
       return;
     }
     // debugger
-    const result = await app.mysql.query(`
+    const result = await app.mysql.get('db1').query(`
       SELECT a.*, c.content FROM content as c
       INNER JOIN article as a
       ON c.sid = '${id}'

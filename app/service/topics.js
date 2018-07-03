@@ -5,12 +5,12 @@ const { aesEncrypt } = require('../util');
 class TopicService extends Service {
   async create(params) {
     // debugger
-    const result = await this.app.mysql.query(`
+    const result = await this.app.mysql.get('db1').query(`
       INSERT INTO truechain_admin.article(title, create_time, tag_list, theme)
       VALUES ('${params.title}', '${params.create_time}', '${params.tag_list}', '${params.theme}');
     `);
     if(result.affectedRows === 1) {
-      await this.app.mysql.query(`
+      await this.app.mysql.get('db1').query(`
         INSERT INTO content(sid, content) VALUE(${result.insertId},'${params.content}')
       `)
     } else {
