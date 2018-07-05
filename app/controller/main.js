@@ -57,7 +57,7 @@ class HomeController extends Controller {
     }
     // debugger
     const result = await app.curl(`http://ip.taobao.com/service/getIpInfo.php?ip=${ip}`);
-    console.log(result);
+    // console.log(result);
 
     ctx.body = {
       code: 0,
