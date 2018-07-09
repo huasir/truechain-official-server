@@ -3,11 +3,11 @@ const Controller = require('egg').Controller;
 class HomeController extends Controller {
   async index() {
     const { ctx, app } = this;
-    const { theme = 1, pageNumber = 10, pageIndex = 0 } = ctx.query;
+    const { theme = 1, pageNumber = 10, pageIndex = 0, language = 1 } = ctx.query;
     // debugger
     const result = await app.mysql.get('db1').query(`
       SELECT * FROM article
-      WHERE theme='${theme}'
+      WHERE theme='${theme}' AND language ='${language}'
       ORDER BY
       create_time
       DESC
@@ -57,7 +57,7 @@ class HomeController extends Controller {
     }
     // debugger
     const result = await app.curl(`http://ip.taobao.com/service/getIpInfo.php?ip=${ip}`);
-    // console.log(result);
+    console.log(result);
 
     ctx.body = {
       code: 0,

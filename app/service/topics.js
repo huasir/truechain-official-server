@@ -6,8 +6,8 @@ class TopicService extends Service {
   async create(params) {
     // debugger
     const result = await this.app.mysql.get('db1').query(`
-      INSERT INTO truechain_admin.article(title, create_time, tag_list, theme)
-      VALUES ('${params.title}', '${params.create_time}', '${params.tag_list}', '${params.theme}');
+      INSERT INTO truechain_admin.article(title, create_time, tag_list, theme, language)
+      VALUES ('${params.title}', '${params.create_time}', '${params.tag_list}', '${params.theme}', '${params.language}');
     `);
     if(result.affectedRows === 1) {
       await this.app.mysql.get('db1').query(`
