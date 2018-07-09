@@ -150,6 +150,18 @@
                         </transition>
                     </Card>
                 </div>
+                <div class="margin-top-10">
+                    <Card>
+                        <p slot="title">
+                            <Icon type="navicon-round"></Icon>
+                            语言
+                        </p>
+                        <RadioGroup v-model="languageSelected" type="button">
+                            <Radio v-for="item in languages" :key="item.title" :label="item.value">{{ item.title }}</Radio>
+                        </RadioGroup>
+                        
+                    </Card>
+                </div>
             </Col>
         </Row>
     </div>
@@ -195,6 +207,8 @@ export default {
             // classificationFinalSelected: [], // 最后实际选择的目录
             publishLoading: false,
             addingNewTag: false, // 添加新标签
+            languages: [], // 语言
+            languageSelected: '1', // 选择的语言
             newTagName: '' // 新建标签名
         };
     },
@@ -215,6 +229,7 @@ export default {
                     content: tinymce.activeEditor.getContent(),
                     create_time: `${+new Date()}`,
                     tag_list: JSON.stringify(this.articleTagSelected), // 标签
+                    language: this.languageSelected || '2', // 语言
                     theme: this.classificationFinalSelected || '1' // 分类
                 }).then(x => {
                     this.publishLoading = false;
@@ -469,6 +484,20 @@ export default {
             {
                 title: '商业动态',
                 value: '2'
+            }
+        ];
+        this.languages = [
+            {
+                title: '中文',
+                value: '1'
+            },
+            {
+                title: '英文',
+                value: '2'
+            },
+            {
+                title: '韩文',
+                value: '3'
             }
         ];
         tinymce.init({
