@@ -6,7 +6,8 @@ const createRule = {
   title: 'string',
   content: 'string',
   create_time: 'string',
-  theme: 'string'
+  theme: 'string',
+  language: 'string'
 };
 
 
