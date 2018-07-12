@@ -2,13 +2,7 @@
 
 const Controller = require('egg').Controller;
 const qiniu = require('qiniu');
-const path = require('path');
 const crypto = require('crypto');
-const md5 = crypto.createHash('md5');
-const FormStream = require('formstream');
-const awaitWriteStream = require('await-stream-ready').write;
-const sendToWormhole = require('stream-wormhole');
-const toArray = require('stream-to-array');
 class HomeController extends Controller {
   async promiseUploader (uploadToken, key, stream, putExtra, formUploader) {
     return new Promise(function(resolve, reject) {
