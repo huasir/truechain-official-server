@@ -7,7 +7,7 @@ class HomeController extends Controller {
     // debugger
     const result = await app.mysql.get('db1').query(`
       SELECT * FROM article
-      WHERE theme='${theme}' AND language ='${language}'
+      WHERE language ='${language}'
       ORDER BY
       create_time
       DESC
