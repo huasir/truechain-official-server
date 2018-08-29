@@ -7,14 +7,14 @@ class HomeController extends Controller {
     // debugger
     const result = await app.mysql.get('db1').query(`
       SELECT * FROM article
-      WHERE theme='?' AND language ='?'
+      WHERE language ='?'
       ORDER BY
       create_time
       DESC
       LIMIT
       ?, ?
     `,
-    [theme,language,pageIndex,pageNumber]
+    [language,pageIndex,pageNumber]
     );
     ctx.body = {
       code: 0,
