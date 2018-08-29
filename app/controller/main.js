@@ -5,7 +5,6 @@ class HomeController extends Controller {
     const { ctx, app } = this;
     const { theme = 1, pageNumber = 10, pageIndex = 0, language = 1 } = ctx.query;
     const result = await app.mysql.get('db1').query(`
-<<<<<<< HEAD
       SELECT * FROM article
       WHERE language = ?
       ORDER BY
@@ -16,16 +15,6 @@ class HomeController extends Controller {
     `,
     [language, Number( pageIndex ), Number( pageNumber ) ]
     );
-=======
-        SELECT * FROM article
-        WHERE language='${language}'
-        ORDER BY
-        create_time
-        DESC
-        LIMIT
-        ${pageIndex}, ${pageNumber}
-    `);
->>>>>>> 1f06066358388e34a18d074d4d72ca53b77c75aa
     ctx.body = {
       code: 0,
       message: '文章列表',
