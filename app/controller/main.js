@@ -7,13 +7,15 @@ class HomeController extends Controller {
     // debugger
     const result = await app.mysql.get('db1').query(`
       SELECT * FROM article
-      WHERE theme='${theme}' AND language ='${language}'
+      WHERE theme='?' AND language ='?'
       ORDER BY
       create_time
       DESC
       LIMIT
-      ${pageIndex}, ${pageNumber}
-    `);
+      ?, ?
+    `,
+    [theme,language,pageIndex,pageNumber]
+    );
     ctx.body = {
       code: 0,
       message: '文章列表',
@@ -35,9 +37,11 @@ class HomeController extends Controller {
     const result = await app.mysql.get('db1').query(`
       SELECT a.*, c.content FROM content as c
       INNER JOIN article as a
-      ON c.sid = '${id}'
-      AND a.id = '${id}'
-    `);
+      ON c.sid = ?
+      AND a.id = ?
+    `,
+    [id,id]
+    );
     ctx.body = {
       code: 0,
       message: '文章列表',
