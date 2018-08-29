@@ -171,6 +171,7 @@
 import tinymce from 'tinymce';
 // import $ from 'jquery';
 import Util from '@/libs/util';
+import Cookies from 'js-cookie';
 import { setStore, getStore, removeStore } from '@/libs/myUtil';
 import { baseUrl } from '@/config/index.js';
 
@@ -224,14 +225,18 @@ export default {
                 this.publishLoading = true;
                 /* eslint-disable no-debugger */
                 // debugger;
-                Util.ajax.post('/api/v2/topics', {
+                Util.ajax.post('/api/v2/topics', 
+                {
                     title: this.articleTitle,
                     content: tinymce.activeEditor.getContent(),
                     create_time: `${+new Date()}`,
                     tag_list: JSON.stringify(this.articleTagSelected), // 标签
                     language: this.languageSelected || '2', // 语言
-                    theme: this.classificationFinalSelected || '1' // 分类
-                }).then(x => {
+                    theme: this.classificationFinalSelected || '1',// 分类                    
+                },
+                // 加入校验
+                { headers:{ 'password':Cookies.get('password') } }
+                ).then(x => {
                     this.publishLoading = false;
                     this.$Notice.success({
                         title: '保存成功',

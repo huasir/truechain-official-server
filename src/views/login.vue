@@ -39,6 +39,7 @@
 
 <script>
 import Cookies from 'js-cookie';
+import Util from '@/libs/util';
 export default {
     data () {
         return {
@@ -57,7 +58,7 @@ export default {
         };
     },
     methods: {
-        handleSubmit () {
+        handleSubmit () { 
             this.$refs.loginForm.validate(valid => {
                 if (valid) {
                     Cookies.set('user', this.form.userName);
@@ -66,15 +67,19 @@ export default {
                         'setAvator',
                         'http://5b0988e595225.cdn.sohucs.com/images/20180105/10f25c75f9bb49b79fedfb8fe0ea505a.jpeg'
                     );
-                    if (this.form.userName === 'admin' && this.form.password === '123456') {
-                        Cookies.set('access', 0);
-                        this.$router.push({
-                            name: 'home_index'
-                        });
-                    } else {
-                        Cookies.set('access', 1);
-                        this.$Message.error('账号或密码错误');
-                    }
+                    
+                    Util.ajax.get('/api2/webLogin',{ headers:{'password':this.form.password } })
+                    .then(x => {
+                        if ( x.data && x.data.code == 200 ) {
+                            Cookies.set('access', 0);
+                            this.$router.push({
+                                name: 'home_index'
+                            });
+                        } else {
+                            Cookies.set('access', 1);
+                            this.$Message.error('账号或密码错误');
+                        }
+                    });
                 }
             });
         }

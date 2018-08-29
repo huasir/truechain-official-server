@@ -42,3 +42,5 @@ new Vue({
         this.$store.commit('setTagsList', tagsList);
     }
 });
+
+if(window){ window.log = console.log; }
