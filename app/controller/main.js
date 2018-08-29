@@ -22,6 +22,7 @@ class HomeController extends Controller {
       data: result
     }
   }
+
   async detail() {
     const { ctx, app } = this;
     const { id  } = ctx.query;
@@ -48,6 +49,23 @@ class HomeController extends Controller {
       data: result
     }
   }
+
+  async webLogin(){
+    const { ctx, app } = this;
+
+    //校验登录密码
+    if( app.config.webUserPwd === ctx.get('password') ){
+      ctx.body = {
+        code: 200,
+        message: 'login success'
+      }
+    }
+    else{
+      ctx.status = 204;
+    }    
+    
+  }
+
   async getIpInfo() {
     const { ctx, app } = this;
     const { ip  } = ctx.query;

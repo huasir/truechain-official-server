@@ -14,6 +14,7 @@ module.exports = app => {
   router.get('/api2/articleList', controller.main.index);
   router.get('/api2/articleDetail', controller.main.detail);
   router.get('/api2/getIpInfo', controller.main.getIpInfo);
+  router.get('/api2/webLogin', controller.main.webLogin);
   router.resources('topics', '/api/v2/topics', controller.topics);
   router.resources('record', '/api/v2/record', controller.record);
 };
