@@ -3,26 +3,19 @@ const Service = require('egg').Service;
 const { aesEncrypt } = require('../util');
 
 class TopicService extends Service {
-  async create(params) {
-    debugger;
-    const sql = `
-        INSERT INTO record(address, value, cause, wechat, mobile, supply, hash, create_time, name, add_from)
-        VALUES (
-          '${params.address}',
-          '${params.value}',
-          '${params.cause || ''}',
-          '${params.wechat || ''}',
-          '${params.mobile || ''}',
-          '${params.supply || ''}',
-          '${params.hash || ''}',
-          '${+new Date() || ''}',
-          '${params.name || ''}',
-          '${params.from || ''}'
-        )
-      `;
-      console.log(sql);
-
-    const result = await this.app.mysql.get('db2').query(sql);
+  async create({ address, value, cause, wechat, mobile, supply, hash, name, from }) {
+    const result = await this.app.mysql.get('db2').insert('record', {
+      address,
+      value,
+      cause,
+      wechat,
+      mobile,
+      supply,
+      hash,
+      create_time: +new Date(),
+      name,
+      add_from: from
+    });
     if(result.affectedRows === 1) {
       return {
         code: 201,
